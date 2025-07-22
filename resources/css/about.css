@@ -1,0 +1,144 @@
+/* 기본 스타일 리셋 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.01); /* 거의 투명한 배경 유지 */
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* 타원형 궤도를 위한 컨테이너 */
+.model-orbit {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  perspective: 1800px;
+  cursor: grab; /* 커서 스타일 변경 - 잡을 수 있는 형태로 */
+}
+
+.model-orbit:active {
+  cursor: grabbing; /* 드래그 중 커서 스타일 */
+}
+
+/* 모델 컨테이너 스타일 */
+.model-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0s linear; /* 초기에는 트랜지션 없음, GSAP에서 애니메이션 처리 */
+}
+
+/* 앞쪽 모델(자동차 위치) - 크기 키움 */
+.model-container.front {
+  transform: translate3d(-20%, 0, 80px) scale(1.2); /* 위치와 z값 수정 */
+  z-index: 10;
+  opacity: 1;
+}
+
+/* 뒤쪽 모델(자전거 위치) - 크기 줄임 */
+.model-container.back {
+  transform: translate3d(30%, 0, -80px) scale(0.7); /* 위치와 z값 수정 */
+  z-index: 5;
+  opacity: 0.65; /* 투명도 변경 */
+}
+
+/* 인터랙션 영역 */
+.interaction-area {
+  position: absolute;
+  bottom: 8%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.swipe-indicator {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.7rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  backdrop-filter: blur(8px);
+  animation: pulse 2s infinite;
+  margin-bottom: 15px;
+}
+
+/* 방향 가이드 */
+.direction-guide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.arrow {
+  width: 30px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  position: relative;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.arrow::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.arrow.left::before {
+  left: 0;
+  top: -2px;
+  transform: rotate(-135deg);
+}
+
+.arrow.right::before {
+  right: 0;
+  top: -2px;
+  transform: rotate(45deg);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* 3D 모델에 대한 캔버스 스타일링 */
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
