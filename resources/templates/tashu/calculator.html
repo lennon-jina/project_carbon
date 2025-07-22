@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자전거 탄소 절감 계산기</title>
+    <link rel="stylesheet" href="css/calculator.css">
+	<!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <!-- 메뉴 아이콘 -->
+    <div class="menu-button" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- 사이드바 메뉴 -->
+    <div class="side-menu" id="sidebar">
+        <div class="menu-header">
+            <span>자전거 대시보드</span>
+            <button class="close-button" id="close-sidebar">×</button>
+        </div>
+		<ul class="menu-list">
+            <li><a href="/"><i class="fas fa-home"></i> 홈</a></li>
+            <li><a href="/bicycle"><i class="fas fa-chart-bar"></i> 데이터 분석</a></li>
+            <li><a href="/predict"><i class="fas fa-bicycle"></i> 빌리기 예측</a></li>
+			<li class="active"><a href="/calculator"><i class="fas fa-leaf"></i> 탄소 발자국</a></li>
+        </ul>
+    </div>
+
+    <!-- 메뉴 오버레이 -->
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <div class="container">
+        <h1>자전거 탄소 절감 계산기</h1>
+
+        <div class="input-section">
+            <label for="duration">오늘 자전거를 몇 분 타셨나요?</label>
+            <div class="input-group">
+                <input type="number" id="duration" min="1" placeholder="시간을 입력하세요">
+                <span>분</span>
+            </div>
+            <button id="calculate-btn">계산하기</button>
+        </div>
+
+        <div class="results" id="results" style="display: none;">
+            <div class="result-item">
+                <h3>이동 거리</h3>
+                <p id="distance"></p>
+            </div>
+            <div class="result-item">
+                <h3>절감된 CO₂</h3>
+                <p id="co2-saved"></p>
+            </div>
+        </div>
+
+        <div class="eco-impact" id="eco-impact" style="display: none;">
+            <h2>환경 영향</h2>
+            <div class="impact-container">
+                <div class="impact-item">
+                    <div id="tree-equivalent" class="impact-value"></div>
+                    <div class="impact-label">심은 나무 효과</div>
+                </div>
+                <div class="impact-item">
+                    <div id="charging-equivalent" class="impact-value"></div>
+                    <div class="impact-label">휴대폰 충전 횟수</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization" id="visualization" style="display: none;">
+            <div class="bike-car-comparison">
+                <div class="vehicle">
+                    <div class="vehicle-icon">🚲</div>
+                    <div class="vehicle-label">자전거</div>
+                    <div class="emissions">0g CO₂</div>
+                </div>
+                <div class="versus">VS</div>
+                <div class="vehicle">
+                    <div class="vehicle-icon">🚗</div>
+                    <div class="vehicle-label">자동차</div>
+                    <div class="emissions" id="car-emissions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/calculator.js"></script>
+</body>
+</html>

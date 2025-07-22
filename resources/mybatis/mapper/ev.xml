@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eco.team.ev.dao.IEvDAO">
+
+    <!-- 휘발유 차량 모델 리스트 -->
+    <select id="getGasolineModels" resultType="string">
+        SELECT model FROM car_info WHERE fuel = 'Gasoline'
+    </select>
+
+    <!-- 전국 누적 CO2 배출량 (전체 합) -->
+    <select id="getTotalNationalEmission" resultType="int">
+        SELECT SUM(co2) FROM national_co2
+    </select>
+
+    <!-- 대전 누적 배출량 -->
+    <select id="getTotalEmissionByDaejeon" resultType="int">
+        SELECT SUM(co2)
+        FROM national_co2
+        WHERE region = '대 전'
+    </select>
+    
+	<select id="getTotalByCar" resultType="map">
+		SELECT 
+			sum(REG_EMISSIONS) AS REG,
+			sum(VAN_EMISSIONS) AS VAN,
+			sum(TRUCK_EMISSIONS) AS TRUCK,
+			sum(SPECIAL_EMISSIONS) AS SPECIAL
+		FROM car_pollution
+	</select>
+
+	    <!-- 2021년 5개 구의 전기차 총합 -->
+	<select id="getTotalEVBy2021" resultType="int">
+	    SELECT SUM(NUM_ELEC_CARS)
+	    FROM electric_car_counts
+	    WHERE YEAR = '2021'
+	</select>
+  <!-- 대전 전기 충전소 갯수-->
+	<select id="getEV" resultType="int">
+	select sum(charger_count) 
+	from daejeon_stat
+	
+	</select>
+	
+	<!-- 차량 모델로 정보 조회 (연비는 km/L 또는 km/kWh로 표시) -->
+    <select id="getCarInfoByModel" resultType="com.eco.team.ev.vo.EvVO">
+        SELECT
+            model,
+            fuel,
+            air_pollution_score AS airPollutionScore,
+            cmb_kpl AS cmbKpl,
+            cmg_kpkwh AS cmgKpkWh,
+            comb_co2 AS combCo2,
+            greenhouse_gas_score AS greenhouseGasScore
+            FROM car_info
+        WHERE model = #{model}
+    </select>
+
+    <select id="getAllModels" resultType="java.lang.String">
+        SELECT model FROM car_info ORDER BY model
+    </select>
+
+    <!-- 전국 연도별 CO2 배출량 -->
+    <select id="getNationalYearlyEmissions" resultType="map">
+        SELECT year AS "year", SUM(co2) AS "amount"
+        FROM national_co2
+        GROUP BY year
+        ORDER BY year
+    </select>
+    <!-- 연도별 전기 자동차 그래프를 그리기 위한 xml-->
+    <select id="getYearEV" resultType="map">
+     SELECT year, SUM(num_elec_cars) AS total_ev
+	FROM electric_car_counts
+	GROUP BY year
+	ORDER BY year
+    
+    
+    </select>
+    <!-- 시군구 전기 충전소 근황-->
+    <select id="getcharge" resultType="map">
+   select sigungu ,charger_count  from daejeon_stat
+
+    </select>
+	<select id="selectinfo" resultType="map">
+	SELECT 
+    ds.sigungu, 
+    ds.ELECTRIC_VEHICLE_COUNT, 
+    ds.CHARGER_COUNT,
+    gp.co2,
+    ds.general_vehicle_count,
+    ds.total_vehicle_count,
+    ds.green_score
+FROM 
+    daejeon_stat ds
+LEFT JOIN 
+    gu_pollution gp
+    ON ds.sigungu = gp.gu_name AND gp.year = '2021'
+ORDER BY 
+    ds.sigungu
+	</select>
+
+
+
+</mapper>

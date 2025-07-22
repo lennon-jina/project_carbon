@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D 모델 전환</title>
+    <!-- GSAP 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- 모던한 폰트 추가 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 3D 모델 컨테이너 -->
+        <div class="model-orbit">
+            <div id="car-model" class="model-container front"></div>
+            <div id="bicycle-model" class="model-container back"></div>
+        </div>
+
+        <!-- 인터랙션 영역 -->
+        <div class="interaction-area">
+            <div class="swipe-indicator">
+                <span>밀어서 자전거로 전환</span>
+            </div>
+            <!-- 방향 가이드 -->
+            <div class="direction-guide">
+                <div class="arrow left"></div>
+                <div class="arrow right"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js 모듈 로드 -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="js/about.js"></script>
+</body>
+</html>

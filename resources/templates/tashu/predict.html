@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자전거 빌리기 예측 - 대시보드</title>
+    <link rel="stylesheet" href="css/predict.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js for graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <!-- 메뉴 아이콘 -->
+    <div class="menu-icon" id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- 사이드바 메뉴 -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>자전거 대시보드</h2>
+            <button class="close-btn" id="close-sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="menu-list">
+            <li><a href="/"><i class="fas fa-home"></i> 홈</a></li>
+            <li><a href="/bicycle"><i class="fas fa-chart-bar"></i> 데이터 분석</a></li>
+            <li class="active"><a href="/predict"><i class="fas fa-bicycle"></i> 빌리기 예측</a></li>
+            <li><a href="/calculator"><i class="fas fa-leaf"></i> 탄소 발자국</a></li>
+        </ul>
+    </div>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="bike-dashboard">
+        <header class="dashboard-header">
+            <h1>자전거 빌리기 예측</h1>
+            <div class="header-right">
+                <span class="date" id="current-date">로딩 중...</span>
+            </div>
+        </header>
+
+        <div class="prediction-now-container">
+            <div class="prediction-now-card">
+                <div class="prediction-now-time" id="current-time">로딩 중...</div>
+                <div class="prediction-now-title">현재 자전거 대여 가능 확률</div>
+                <div class="prediction-now-value" id="current-probability">85%</div>
+                <div class="prediction-status high">대여 가능성 높음</div>
+            </div>
+            
+            <div class="prediction-trend-card">
+                <div class="chart-header">
+                    <h2>시간대별 대여 가능 확률</h2>
+                </div>
+                <div class="chart-content">
+                    <canvas id="availability-trend-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider">
+            <h2><i class="fas fa-calendar-alt"></i> 특정 시간 대여 가능성 예측</h2>
+        </div>
+
+        <div class="prediction-custom-container">
+            <div class="prediction-input-card">
+                <div class="form-group">
+                    <label for="prediction-date">날짜 선택</label>
+                    <input type="date" id="prediction-date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="prediction-time">시간 선택</label>
+                    <input type="time" id="prediction-time" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="location-select">대여 장소</label>
+                    <select id="location-select" class="form-control">
+                        <option value="all">모든 지역</option>
+                        <option value="donggu">동구</option>
+                        <option value="junggu">중구</option>
+                        <option value="seogu">서구</option>
+                        <option value="yuseonggu">유성구</option>
+                        <option value="daedeokgu">대덕구</option>
+                    </select>
+                </div>
+                <button id="predict-button" class="predict-button">
+                    <i class="fas fa-bicycle"></i> 예측하기
+                </button>
+            </div>
+            
+            <div class="prediction-result-card" id="prediction-result">
+                <div class="result-header">예측 결과</div>
+                <div class="result-content">
+                    <div class="result-label">선택한 시간:</div>
+                    <div class="result-value" id="selected-datetime">날짜와 시간을 선택하세요</div>
+                    
+                    <div class="result-label">대여 가능 확률:</div>
+                    <div class="result-probability" id="result-probability">-</div>
+                    
+                    <div class="result-label">상태:</div>
+                    <div class="result-status" id="result-status">-</div>
+                    
+                    <div class="suggestion-container">
+                        <div class="suggestion-title">추천 사항:</div>
+                        <div class="suggestion-content" id="suggestion-content">
+                            날짜와 시간을 선택한 후 예측하기 버튼을 누르세요.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="factors-container">
+            <div class="factors-card">
+                <div class="factors-header">
+                    <h2>예측 영향 요인</h2>
+                </div>
+                <div class="factors-content">
+                    <div class="factor-item">
+                        <div class="factor-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="factor-info">
+                            <div class="factor-title">이용자 수</div>
+                            <div class="factor-value" id="users-factor">높음</div>
+                        </div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <div class="factor-info">
+                            <div class="factor-title">날씨 조건</div>
+                            <div class="factor-value" id="weather-factor">맑음</div>
+                        </div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-icon">
+                            <i class="fas fa-bicycle"></i>
+                        </div>
+                        <div class="factor-info">
+                            <div class="factor-title">자전거 가용성</div>
+                            <div class="factor-value" id="bikes-factor">양호</div>
+                        </div>
+                    </div>
+                    <div class="factor-item">
+                        <div class="factor-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="factor-info">
+                            <div class="factor-title">요일 인기도</div>
+                            <div class="factor-value" id="day-factor">보통</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/predict.js"></script>
+</body>
+</html>

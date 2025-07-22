@@ -1,0 +1,294 @@
+<!DOCTYPE html> 
+<html lang="ko"> 
+<head>   
+  <meta charset="UTF-8">   
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+  <title>Carbon Break - 탄소중립 실천하기</title>   
+  <link rel="stylesheet" href="css/main.css">
+  <!-- GSAP 라이브러리 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <!-- 모듈 방식으로 변경 -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.151.3/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.151.3/examples/jsm/"
+    }
+  }
+  </script>
+  <style>
+    /* 메뉴 그리드 레이아웃 추가 */
+    .menu-grid {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+      gap: 30px;
+    }
+    
+    .menu-grid .level-1 {
+      flex: 1;
+      display: block;
+    }
+    
+    /* 기존 grid 레이아웃 재정의 */
+    .level-1 li:nth-of-type(1) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    
+    .level-1 li:nth-of-type(2) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    
+    .level-1 li:nth-of-type(3) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    
+    .level-1 li:nth-of-type(4) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    
+    /* 모바일 반응형 조정 */
+    @media screen and (max-width: 768px) {
+      .menu-grid {
+        flex-direction: column;
+      }
+      
+      .level-1 {
+        margin-bottom: 30px;
+      }
+    }
+  </style>
+</head> 
+<body> 
+	<!-- 새로운 메뉴 코드 -->
+	<div class="page-wrap">
+    <header class="page-header">
+      <nav>
+        <h1>Carbon Break</h1>
+        <ul>
+          <li>About Us</li>
+          <li>Contact Us</li>
+          <li id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <section>
+      <div class="menu-grid">
+        <ul class="level-1">
+          <li>
+            <h3>전기차</h3>
+            <ul class="level-2">
+              <li>
+                <a href="/chart">데이터 분석</a>
+                <ul class="level-3">
+                  <li># 전기차_데이터</li>
+                  <li># 충전소_위치</li>
+                  <li># 탄소절감_효과</li>
+                </ul>
+              </li>
+              <li>
+                <a href="/carModels">전기차 체험하기</a>
+                <ul class="level-3">
+                  <li># 3D_모델</li>
+                  <li># 시뮬레이션</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="level-1">
+          <li>
+            <h3>자전거</h3>
+            <ul class="level-2">
+              <li>
+                <a href="/bicycle">데이터 분석</a>
+                <ul class="level-3">
+                  <li># 타슈</li>
+                  <li># 이용량_분석</li>
+                  <li># 탄소절감_효과</li>
+                </ul>
+              </li>
+              <li>
+                <a href="/predict">빌리기 예측</a>
+                <ul class="level-3">
+                  <li># 예측</li>
+                  <li># 언제_빌릴_수_있을까</li>
+                </ul>
+              </li>
+              <li>
+                <a href="/calculator">탄소 발자국</a>
+                <ul class="level-3">
+                  <li># 비교</li>
+                  <li># 자동차_대비</li>
+                  <li># 얼마나_탄소를_줄였을까</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  
+  <!-- 메인 페이지 - 숲 배경과 텍스트 -->
+  <section class="main-section" id="main">
+    <!-- 숲 배경 -->
+    <div class="forest-background"></div>
+    
+    <!-- 메인 텍스트 -->
+    <div class="main-content">
+      <h1 class="main-title">CARBON<br>BREAK</h1>
+      </div>
+    </div>
+  </section>
+  
+  <!-- About 섹션 -->
+  <section class="about-section" id="about">
+  <div class="container">
+      <h2 class="section-title">우리가 '탄소 브레이크'를 만든 이유</h2>
+      
+      <div class="about-content">
+	      <div class="about-text">
+	          <p>지금 지구는 위험 신호를 보내고 있어요. 기후 위기, 미세먼지, 이상기온 같은 문제들은 더 이상 먼 미래의 이야기가 아닙니다. 이미 우리의 일상과 건강을 직접적으로 위협하고 있으며, 앞으로는 더 심각한 변화가 닥칠 수 있습니다.</p>
+	          
+	          <p>전 세계는 이러한 위기에 대응하기 위해 <strong>'2050 탄소중립'</strong>이라는 공동의 목표를 향해 나아가고 있습니다. 한국 역시 그 흐름에 발맞춰 관련 정책을 강화하고, 지속 가능한 미래를 위한 대책들을 마련하고 있죠.</p>
+	          <p class="emphasis">그렇다면, 우리 같은 평범한 사람들은 <strong>일상에서 무엇을 바꿔야 할까요?</strong></p>
+	          
+	          <p>그 해답 중 하나가 바로 <strong>'교통'</strong>에 있습니다. 우리는 매일 이동합니다. 그리고 그 모든 이동은 탄소 배출과 밀접하게 연결되어 있습니다. 하지만 이동의 방식을 조금만 바꾸면, 놀라울 만큼 의미 있는 변화를 만들어낼 수 있습니다.</p>
+	          
+	          <p>우리가 제안하는 지속 가능한 선택: <strong>전기차와 자전거</strong></p>
+	          
+	          <div class="transportation-options">
+	          <div class="option">
+	              <h3>🚲 자전거</h3>
+	              <ul>
+	              <li>페달 하나로 움직이는 가장 친환경적인 교통수단</li>
+	              <li><strong>UN도 '세계 자전거의 날(6월 3일)'</strong>을 지정할 만큼, 자전거는 전 세계적으로 주목받고 있습니다.</li>
+	              <li>특히 전기자전거, 공유 자전거 등 새로운 형태의 자전거 서비스는 더 많은 사람들이 쉽게 접근할 수 있도록 도와주고 있습니다.</li>
+	              </ul>
+	          </div>
+	          
+	          <div class="option">
+	              <h3>🚗 전기차</h3>
+	              <ul>
+	              <li>내연기관차보다 탄소 배출량이 현저히 적은 차세대 교통수단</li>
+	              <li><strong>자율주행, 공유 전기차, 스마트 모빌리티</strong>와 같은 기술의 발전은 전기차를 단순한 대체 수단이 아닌, 탄소중립 사회의 핵심 열쇠로 주목하게 만듭니다.</li>
+	              </ul>
+	          </div>
+	          </div>
+	          
+	          <p>우리는 <strong>'탄소 브레이크(Carbon Break)'</strong>라는 이름처럼 일상 속 탄소 배출에 브레이크를 걸고, 더 많은 사람들이 친환경 교통수단을 통해 변화의 주체가 되기를 바라는 마음으로 만들었습니다.</p>
+	          
+	          <p>이곳에서 자전거, 전기차를 통한 탄소 절감 효과를 확인하고, 직접 그 변화를 체험해보세요.</p>
+	      </div>
+      
+	      <div class="stats-container">
+	          <div class="stat-card">
+		          <div class="stat-number">23%</div>
+		          <div class="stat-text">전세계 온실가스 배출의 약 23%는 교통 부문에서 발생합니다.</div>
+	          </div>
+	          
+	          <div class="stat-card">
+		          <div class="stat-number">45%</div>
+		          <div class="stat-text">대중교통 이용 시 개인 자가용 대비 CO₂ 배출량을 최대 45% 줄일 수 있습니다.</div>
+	          </div>
+	          
+	          <div class="stat-card">
+		          <div class="stat-number">90%</div>
+		          <div class="stat-text">자전거 이용은 자동차 대비 CO₂ 배출량을 90% 이상 감소시킵니다.</div>
+	          </div>
+      	  </div>
+      </div>
+  </div>
+  </section>
+
+
+  <!-- 실천 방법 선택 섹션 - 3D 턴테이블 스타일 -->
+  <section class="solutions-section" id="solutions">
+    <div class="selection-container">
+      <h2 class="section-title">탄소중립 실천 방법</h2>
+      <p class="solutions-intro">더 나은 미래를 위한 이동수단을 선택하세요</p>
+      
+      <div class="selection-UI">
+        <div class="model-showcase">
+          <div class="model-platform">
+            <div class="model-stage" id="model-stage">
+              <!-- 3D 모델들이 여기에 렌더링됩니다 -->
+            </div>
+            <div class="platform-shadow"></div>
+          </div>
+          
+          <div class="model-controls">
+            <button class="control-btn prev-btn" id="prev-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button class="control-btn next-btn" id="next-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="model-info-panel">
+          <div class="model-info active" data-model="electric-car">
+            <h3 class="model-title">전기차</h3>
+            <p class="model-description">내연기관 차량보다 탄소배출량을 70%까지 줄일 수 있는 친환경 이동수단입니다. 충전소 인프라가 지속적으로 확대되고 있으며, 배터리 기술 발전으로 주행거리도 계속 늘어나고 있습니다.</p>
+            <a class="btn-select" data-model="electric-car"href="/chart">선택하기</a>
+          </div>
+          
+          <div class="model-info" data-model="bicycle">
+            <h3 class="model-title">자전거</h3>
+            <p class="model-description">탄소 배출이 거의 없는 가장 친환경적인 이동수단으로, 건강 증진 효과까지 얻을 수 있습니다. 도시 인프라가 개선되면서 자전거 도로가 확대되고 있어 안전하고 편리하게 이용할 수 있습니다.</p>
+            <a class="btn-select" data-model="bicycle" href="/bicycle">선택하기</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+  <script>
+    // 햄버거 메뉴 관련 코드 - 메뉴 레이아웃 변경에 맞춰 수정
+    document.addEventListener('DOMContentLoaded', function() {
+      let burger = document.getElementById("burger");
+      let overlay = document.querySelector(".page-wrap section");
+      let showMenu = false;
+      
+      overlay.style.display = "none";
+      burger.addEventListener("click", (e) => {
+        showMenu = !showMenu;
+        if (showMenu) {
+          burger.classList.add("active");
+          overlay.style.display = "block";
+          gsap.to(overlay, 1, {
+            clipPath: "polygon(0% 0%, 100% 0, 100% 100%, 0% 100%)",
+            ease: "expo.in"
+          });
+        } else {
+          burger.classList.remove("active");
+          gsap.to(overlay, 1, {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+            ease: "expo.out",
+            onComplete: () => (overlay.style.display = "none")
+          });
+        }
+      });
+    });
+  </script>
+</body> 
+</html>

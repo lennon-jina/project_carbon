@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>친환경 차량 전환 시뮬레이터</title>
+    <link rel="stylesheet" href="css/carSearch.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+	<div class="menu-icon" id="menu-toggle">
+	    <i class="fas fa-bars"></i>
+	</div>
+
+	<div class="sidebar" id="sidebar">
+	    <div class="sidebar-header">
+	        <h2>전기차 체험하기</h2>
+	        <button class="close-btn" id="close-sidebar">
+	            <i class="fas fa-times"></i>
+	        </button>
+	    </div>
+	    <ul class="menu-list">
+	        <li><a href="/"><i class="fas fa-home"></i> 홈</a></li>
+	        <li><a href="/chart"><i class="fas fa-chart-bar"></i> 데이터 분석</a></li>
+			<li class="active"><a href="/carModels"><i class="fas fa-car-alt"></i> 전기차 체험하기</a></li>
+	    </ul>
+	</div>
+
+	<div class="container">
+	    <header>
+	        <h1>친환경 차량 전환 시뮬레이터</h1>
+	        <p class="subtitle">내 차를 전기차로 바꾸면 얼마나 환경에 도움이 될까요?</p>
+	    </header>
+	
+	    <div class="search-section">
+	        <div class="search-container">
+	            <select id="carSelect" name="model">
+	                <option value="">-- 차량 모델 선택 --</option>
+	                <th:block th:each="model : ${modelList}">
+	                    <option th:value="${model}" th:text="${model}"></option>
+	                </th:block>
+	            </select>
+	            <input type="number" id="fuelPriceInput" placeholder="유가 입력 (원/L)" style="margin-left: 10px; width: 150px;">
+	            <button id="searchBtn">검색하기</button>
+	        </div>
+	        <div class="search-result" id="searchResult"></div>
+	    </div>
+	
+	    <div class="model-viewer-container">
+	        <div id="modelInfo" class="model-info">
+	            <h2 id="carModelName">차량 모델</h2>
+	            <div id="carSpecs" class="car-specs">
+	                <div class="spec-item">
+	                    <div class="spec-icon fuel-icon"></div>
+	                    <div class="spec-details">
+	                        <span class="spec-label">연료</span>
+	                        <span id="fuelType" class="spec-value">-</span>
+	                    </div>
+	                </div>
+	                <div class="spec-item">
+	                    <div class="spec-icon emission-icon"></div>
+	                    <div class="spec-details">
+	                        <span class="spec-label">CO₂ 배출량</span>
+	                        <span id="emission" class="spec-value">-</span>
+	                    </div>
+	                </div>
+	                <div class="spec-item">
+	                    <div class="spec-icon efficiency-icon"></div>
+	                    <div class="spec-details">
+	                        <span class="spec-label">연비</span>
+	                        <span id="efficiency" class="spec-value">-</span>
+	                    </div>
+	                </div>
+	            </div>
+    		</div>
+	            <div id="canvas-container"></div>
+	            <button id="convertBtn" class="convert-btn">전기차로 변환 계산!</button>
+	        </div>
+
+			<div id="resultContainer" style="display: none;">
+	            <div class="result-header">
+	                <h2>전기차 전환 효과</h2>
+	                <span></span>
+	            </div>
+
+	            <div class="comparison-container">
+	                <div class="comparison-item">
+						<div class="comparison-header">연간 탄소 배출량 (10,000km 기준)</div>
+				            <div class="comparison-values">
+				                <div class="before-value">
+				                    <span class="value">6,080.0</span>
+				                    <span class="unit">kg CO₂</span>
+				                </div>
+							<div class="arrow">→</div>
+			               <div class="after-value">
+			                   <span class="value">0</span> <span class="unit">kg CO₂</span>
+			               </div>
+	                    </div>
+						<div class="saving">
+			                <div class="saving-value">6,080.0 kg 절감</div>
+			                <div class="saving-percent">100% 감소</div>
+			            </div>
+	                </div>
+
+					<div class="comparison-item">
+	                    <div class="comparison-header">10년간 탄소 배출량</div>
+	                    <div class="comparison-values">
+	                        <div class="before-value">
+	                            <span class="value" id="originalTenYearCo2">6,0800.0</span>
+	                            <span class="unit">kg CO₂</span>
+	                        </div>
+						   <div class="arrow">→</div>
+			               <div class="after-value">
+			                   <span class="value">0</span> <span class="unit">kg CO₂</span>
+			               </div>
+	                    </div>
+						<div class="saving">
+			                <div class="saving-value">60,800.0 kg 절감</div>
+			                <div class="saving-percent">100% 감소</div>
+			            </div>
+	                </div>
+
+	                <div class="comparison-item tree-equivalent">
+	                    <div class="comparison-header">나무 심기 효과</div>
+	                    <div class="tree-graphic">
+	                        <div class="tree-icons" id="treeIcons"></div>
+	                        <div class="tree-label" id="treePlantingEffectText"></div>
+	                    </div>
+	                </div>
+	            </div>
+
+	            <div class="comparison-container" id="costContainer">
+	                <div class="comparison-item">
+	                    <div class="comparison-header">연간 연료비 절감액</div>
+	                    <div class="comparison-values">
+	                        <div class="before-value">
+	                            <span class="value" id="originalAnnualFuelCost"></span>
+	                            <span class="unit">원</span>
+	                        </div>
+	                        <div class="arrow">→</div>
+	                        <div class="after-value">
+	                            <span class="value" id="electricAnnualFuelCost"></span>
+	                            <span class="unit">원</span>
+	                        </div>
+	                    </div>
+	                    <div class="saving">
+	                        <div class="saving-value" id="annualFuelCostSavingsText"></div> <div class="saving-percent" id="annualFuelCostSavingsPercentage"></div> </div>
+	                </div>
+	            </div>
+
+	            <button id="resetBtn" class="reset-btn">처음부터 다시하기</button>
+	        </div>
+	    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script src="js/carSearch.js?v=1.0.5" type="module"></script>
+    <script>
+        document.getElementById("searchBtn").addEventListener("click", function () {
+            const selectedModel = document.getElementById("carSelect").value;
+            const fuelPricePerLiter = parseFloat(document.getElementById("fuelPriceInput").value);
+            if (!selectedModel) {
+                alert("차량 모델을 선택하세요.");
+                return;
+            }
+            if (isNaN(fuelPricePerLiter) || fuelPricePerLiter <= 0) {
+                alert("유가를 정확히 입력하세요.");
+                return;
+            }
+
+            fetch(`/car/info?model=${encodeURIComponent(selectedModel)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("로딩중.");
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById("carModelName").textContent = selectedModel;
+                    document.getElementById("fuelType").textContent = data.fuel;
+                    document.getElementById("emission").textContent = data.comb_co2 + " g/km";
+                    document.getElementById("efficiency").textContent = data.cmb_kpl + " km/L";
+
+					const annualKm = 10000;
+					const co2PerKm = parseFloat(data.comb_co2);
+					// 내연기관 차 배출량 (g/km → kg/연간)
+					const annualKg = (isNaN(co2PerKm) || co2PerKm <= 0) ? 120 : (co2PerKm * annualKm) / 1000;
+					const tenYearKg = annualKg * 10;
+					
+					// 전기차는 0g/km로 가정 (혹은 평균값 사용)
+					const evCo2PerKm = 0;
+					const evAnnualKg = (evCo2PerKm * annualKm) / 1000;
+					const evTenYearKg = evAnnualKg * 10;
+
+                   
+                    document.querySelectorAll(".saving-value")[0].textContent = annualKg.toFixed(1) + " kg 절감";
+                    document.querySelectorAll(".saving-percent")[0].textContent = "100% 감소";
+
+                    
+                    document.querySelectorAll(".saving-value")[1].textContent = tenYearKg.toFixed(1) + " kg 절감";
+                    document.querySelectorAll(".saving-percent")[1].textContent = "100% 감소";
+
+					// 나무 1그루가 연간 6.6kg CO₂ 흡수 기준
+					const treeCount = Math.round((tenYearKg - evTenYearKg) / 6.6);
+					document.querySelector(".tree-label").textContent = `약 9212그루의 나무 심은 효과`;
+				
+
+					// 유류비 절감 계산
+					const evEfficiency = 5.9;
+					const electricityRate = 347.2;
+
+					// 연비가 0이거나 비정상일 경우 방어 처리
+					const kpl = parseFloat(data.cmb_kpl);
+					const fuelEfficiency = (isNaN(kpl) || kpl <= 0) ? 10 : kpl; // 기본값 10 km/L
+
+					const fuelCost = (annualKm / fuelEfficiency) * fuelPricePerLiter;
+					const electricCost = (annualKm / evEfficiency) * electricityRate;
+					const savedCost = fuelCost - electricCost;
+
+					// NaN 방지 포맷팅 함수
+					const safeFixed = (val, digits = 0) => isNaN(val) ? "0" : val.toFixed(digits);
+					const safePercent = (val) => isNaN(val) ? "0%" : `약 ${(val * 100).toFixed(0)}% 절감`;
+
+                    const costContainer = document.getElementById("costContainer");
+                    costContainer.innerHTML = "";
+
+                    const costItem = document.createElement("div");
+                    costItem.classList.add("comparison-item");
+                    costItem.innerHTML = `
+                        <div class="comparison-header">연간 연료비 절감액</div>
+                        <div class="comparison-values">
+                            <div class="before-value">
+                                <span class="value">${fuelCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                                <span class="unit">원</span>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="after-value">
+                                <span class="value">${electricCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                                <span class="unit">원</span>
+                            </div>
+                        </div>
+                        <div class="saving">
+                            <div class="saving-value">${savedCost.toLocaleString(undefined, { maximumFractionDigits: 0 })} 원 절감</div>
+                            <div class="saving-percent">약 ${(savedCost / fuelCost * 100).toFixed(0)}% 절감</div>
+                        </div>
+                    `;
+                    costContainer.appendChild(costItem);
+                })
+                .catch(err => {
+                    alert(err.message);
+                });
+        });
+
+        document.getElementById("convertBtn").addEventListener("click", function () {
+            document.getElementById("resultContainer").style.display = "block";
+        });
+
+        document.getElementById("resetBtn").addEventListener("click", function () {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
